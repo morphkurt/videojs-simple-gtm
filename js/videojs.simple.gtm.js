@@ -15,7 +15,7 @@ videojs.registerPlugin('simplegtm', function (options) {
         percentsPlayedInterval = options.percentsPlayedInterval,
         percentsAlreadyTracked = []
 
-    var mapping 
+    var mapping
 
 
     player.on('loadedmetadata', function () {
@@ -30,7 +30,7 @@ videojs.registerPlugin('simplegtm', function (options) {
                 mapping["mediainfo"].forEach(function (data) {
                     Object.keys(data).forEach(function (key) {
                         _dataLayerArray[key] = player.mediainfo[data[key]]
-                        debug && console.log(`++++ added { "${key}" : "${player.mediainfo[data[key]]}"}  +++ `);
+                        debug && console.log('++++ added "' + key + '" : "' + player.mediainfo[data[key]] + '"}  +++ ');
                     })
                 })
             }
@@ -38,7 +38,7 @@ videojs.registerPlugin('simplegtm', function (options) {
                 mapping["bcAnalytics.client.defaultParams_"].forEach(function (data) {
                     Object.keys(data).forEach(function (key) {
                         _dataLayerArray[key] = player.bcAnalytics.client.defaultParams_[data[key]]
-                        debug && console.log(`++++ added { "${key}" : "${player.bcAnalytics.client.defaultParams_[data[key]]}"}  +++ `);
+                        debug && console.log('++++ added "' + key + '" : "' + player.bcAnalytics.client.defaultParams_[data[key]] + '"}  +++ ');
                     })
                 })
             }
@@ -46,7 +46,7 @@ videojs.registerPlugin('simplegtm', function (options) {
                 mapping["customFields"].forEach(function (data) {
                     Object.keys(data).forEach(function (key) {
                         _dataLayerArray[key] = player.mediainfo.customFields[data[key]]
-                        debug && console.log(`++++ added { "${key}" : "${player.mediainfo.customFields[data[key]]}"}  +++ `);
+                        debug && console.log('++++ added "' + key + '" : "' + player.mediainfo.customFields[data[key]] + '"}  +++ ');
                     })
                 })
             }
