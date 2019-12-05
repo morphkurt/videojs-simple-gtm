@@ -34,8 +34,8 @@ videojs.registerPlugin('simplegtm', function (options) {
                     })
                 })
             }
-            if (mapping["bcAnalytics.client.defaultParams_"]) {
-                mapping["bcAnalytics.client.defaultParams_"].forEach(function (data) {
+            if (mapping["bcAnalytics_client_defaultParams_"]) {
+                mapping["bcAnalytics_client_defaultParams_"].forEach(function (data) {
                     Object.keys(data).forEach(function (key) {
                         _dataLayerArray[key] = player.bcAnalytics.client.defaultParams_[data[key]]
                         debug && console.log('++++ added "' + key + '" : "' + player.bcAnalytics.client.defaultParams_[data[key]] + '"}  +++ ');
