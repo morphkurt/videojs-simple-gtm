@@ -15,7 +15,7 @@ videojs.registerPlugin('simplegtm', function (options) {
         percentsPlayedInterval = options.percentsPlayedInterval,
         percentsAlreadyTracked = []
 
-    var mapping = 
+    var mapping 
 
 
     player.on('loadedmetadata', function () {
