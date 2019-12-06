@@ -6,10 +6,15 @@ videojs.registerPlugin('simplegtm', function (options) {
     }
 
     var debug = false;
+    var enable = true
     var firstPlay = false;
 
     if (options) {
         debug = options.debug;
+        if (options.enable) {
+            enable = options.enable
+        }
+
     }
 
     var player = this,
@@ -43,8 +48,8 @@ videojs.registerPlugin('simplegtm', function (options) {
                     Object.keys(data).forEach(function (key) {
 
                         if (key == "pageName") {
-                            _dataLayerArray[key] = player.bcAnalytics.client.defaultParams_[data[key]].replace(domainRegex,"")
-                            debug && console.log('++++ added "' + key + '" : "' + player.bcAnalytics.client.defaultParams_[data[key]].replace(domainRegex,"") + '"}  +++ ');
+                            _dataLayerArray[key] = player.bcAnalytics.client.defaultParams_[data[key]].replace(domainRegex, "")
+                            debug && console.log('++++ added "' + key + '" : "' + player.bcAnalytics.client.defaultParams_[data[key]].replace(domainRegex, "") + '"}  +++ ');
                         } else {
                             _dataLayerArray[key] = player.bcAnalytics.client.defaultParams_[data[key]]
                             debug && console.log('++++ added "' + key + '" : "' + player.bcAnalytics.client.defaultParams_[data[key]] + '"}  +++ ');
@@ -79,7 +84,7 @@ videojs.registerPlugin('simplegtm', function (options) {
             }
             _dataLayerArray['mediaAssetType'] = 'video'
         }
-        dataLayer.push(_dataLayerArray)
+        enable && dataLayer.push(_dataLayerArray)
     });
 
 
@@ -87,11 +92,11 @@ videojs.registerPlugin('simplegtm', function (options) {
         debug && console.log('+++ play +++ ');
         if (firstPlay) {
             debug && console.log('+++ first play +++ ');
-            dataLayer.push({ "event": "mediaPlayProgressStarted" })
+            enable && dataLayer.push({ "event": "mediaPlayProgressStarted" })
             firstPlay = false
         } else {
             debug && console.log('+++ non first play +++ ');
-            dataLayer.push({ "event": "mediaPlayBackStarted" })
+            enable && dataLayer.push({ "event": "mediaPlayBackStarted" })
         }
     });
     //
@@ -102,13 +107,13 @@ videojs.registerPlugin('simplegtm', function (options) {
 
     player.on('pause', function () {
         debug && console.log('+++ pause +++ ');
-        dataLayer.push({ "event": "mediaPlaybackPaused" })
+        enable && dataLayer.push({ "event": "mediaPlaybackPaused" })
 
     });
 
     player.on('ended', function () {
         debug && console.log('+++ ended +++ ');
-        dataLayer.push({ "event": "mediaPlaybackFinished" })
+        enable && dataLayer.push({ "event": "mediaPlaybackFinished" })
     });
 
     player.on('timeupdate', function () {
@@ -121,7 +126,7 @@ videojs.registerPlugin('simplegtm', function (options) {
                 if (percentPlayed !== 0) {
                     if (percent > 0) {
                         debug && console.log(percent + '% Milestone Passed');
-                        dataLayer.push({
+                        enable && dataLayer.push({
                             "event": "mediaPlayProgress",
                             "mediaPlayProgressPosition": percent / 100
                         })
