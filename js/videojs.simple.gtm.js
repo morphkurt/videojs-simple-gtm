@@ -6,6 +6,7 @@ videojs.registerPlugin('simplegtm', function (options) {
     }
 
     var debug = false;
+    var firstPlay = false;
 
     if (options) {
         debug = options.debug;
@@ -16,6 +17,9 @@ videojs.registerPlugin('simplegtm', function (options) {
         percentsAlreadyTracked = []
 
     var mapping
+    var domainRegex = /^(http|https):\/\/[\w\d.]+/g
+
+
 
 
     player.on('loadedmetadata', function () {
@@ -37,8 +41,15 @@ videojs.registerPlugin('simplegtm', function (options) {
             if (mapping["bcAnalytics_client_defaultParams_"]) {
                 mapping["bcAnalytics_client_defaultParams_"].forEach(function (data) {
                     Object.keys(data).forEach(function (key) {
-                        _dataLayerArray[key] = player.bcAnalytics.client.defaultParams_[data[key]]
-                        debug && console.log('++++ added "' + key + '" : "' + player.bcAnalytics.client.defaultParams_[data[key]] + '"}  +++ ');
+
+                        if (key == "pageName") {
+                            _dataLayerArray[key] = player.bcAnalytics.client.defaultParams_[data[key]].replace(domainRegex,"")
+                            debug && console.log('++++ added "' + key + '" : "' + player.bcAnalytics.client.defaultParams_[data[key]].replace(domainRegex,"") + '"}  +++ ');
+                        } else {
+                            _dataLayerArray[key] = player.bcAnalytics.client.defaultParams_[data[key]]
+                            debug && console.log('++++ added "' + key + '" : "' + player.bcAnalytics.client.defaultParams_[data[key]] + '"}  +++ ');
+
+                        }
                     })
                 })
             }
@@ -50,6 +61,23 @@ videojs.registerPlugin('simplegtm', function (options) {
                     })
                 })
             }
+            if (mapping["staticFields"]) {
+                mapping["staticFields"].forEach(function (data) {
+                    Object.keys(data).forEach(function (key) {
+                        _dataLayerArray[key] = data[key]
+                        debug && console.log('++++ added "' + key + '" : "' + data[key] + '"}  +++ ');
+                    })
+                })
+            }
+            // Special additons (if duration > 0 it will be a demand otherwise it will be live)
+            if (mediainfo.duration > 0) {
+                debug && console.log('++++ added mediaAssetDelivery : demand +++ ');
+                _dataLayerArray['mediaAssetDelivery'] = 'demand'
+            } else {
+                debug && console.log('++++ added mediaAssetDelivery : live +++ ');
+                _dataLayerArray['mediaAssetDelivery'] = 'live'
+            }
+            _dataLayerArray['mediaAssetType'] = 'video'
         }
         dataLayer.push(_dataLayerArray)
     });
@@ -57,7 +85,24 @@ videojs.registerPlugin('simplegtm', function (options) {
 
     player.on('play', function () {
         debug && console.log('+++ play +++ ');
-        dataLayer.push({ "event": "mediaPlayProgressStarted" })
+        if (firstPlay) {
+            debug && console.log('+++ first play +++ ');
+            dataLayer.push({ "event": "mediaPlayProgressStarted" })
+        } else {
+            debug && console.log('+++ non first play +++ ');
+            dataLayer.push({ "event": "mediaPlayBackStarted" })
+        }
+    });
+    //
+    player.on('loadstart', function () {
+        debug && console.log('+++ loadstart +++ ');
+        firstPlay = true;
+    });
+
+    player.on('pause', function () {
+        debug && console.log('+++ pause +++ ');
+        dataLayer.push({ "event": "mediaPlaybackPaused" })
+
     });
 
     player.on('ended', function () {
