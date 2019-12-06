@@ -17,7 +17,7 @@ videojs.registerPlugin('simplegtm', function (options) {
         percentsAlreadyTracked = []
 
     var mapping
-    var domainRegex = /^(http|https):\/\/[\w\d.]+/g
+    var domainRegex = /^(http|https):\/\/[\w\d.:]+/g
 
 
 
@@ -70,7 +70,7 @@ videojs.registerPlugin('simplegtm', function (options) {
                 })
             }
             // Special additons (if duration > 0 it will be a demand otherwise it will be live)
-            if (mediainfo.duration > 0) {
+            if (player.mediainfo.duration > 0) {
                 debug && console.log('++++ added mediaAssetDelivery : demand +++ ');
                 _dataLayerArray['mediaAssetDelivery'] = 'demand'
             } else {
@@ -88,6 +88,7 @@ videojs.registerPlugin('simplegtm', function (options) {
         if (firstPlay) {
             debug && console.log('+++ first play +++ ');
             dataLayer.push({ "event": "mediaPlayProgressStarted" })
+            firstPlay = false
         } else {
             debug && console.log('+++ non first play +++ ');
             dataLayer.push({ "event": "mediaPlayBackStarted" })
