@@ -7,6 +7,7 @@ videojs.registerPlugin('simplegtm', function (options) {
 
     var debug = false;
     var firstPlay = false;
+    var _dataLayerArray;
 
     if (options) {
         debug = options.debug;
@@ -23,7 +24,7 @@ videojs.registerPlugin('simplegtm', function (options) {
 
 
     player.on('loadedmetadata', function () {
-        var _dataLayerArray = {};
+        _dataLayerArray = {};
         debug && console.log('++++ loadedmetadata +++ ');
 
         if (!options.mapping) {
@@ -43,8 +44,8 @@ videojs.registerPlugin('simplegtm', function (options) {
                     Object.keys(data).forEach(function (key) {
 
                         if (key == "pageName") {
-                            _dataLayerArray[key] = player.bcAnalytics.client.defaultParams_[data[key]].replace(domainRegex,"")
-                            debug && console.log('++++ added "' + key + '" : "' + player.bcAnalytics.client.defaultParams_[data[key]].replace(domainRegex,"") + '"}  +++ ');
+                            _dataLayerArray[key] = player.bcAnalytics.client.defaultParams_[data[key]].replace(domainRegex, "")
+                            debug && console.log('++++ added "' + key + '" : "' + player.bcAnalytics.client.defaultParams_[data[key]].replace(domainRegex, "") + '"}  +++ ');
                         } else {
                             _dataLayerArray[key] = player.bcAnalytics.client.defaultParams_[data[key]]
                             debug && console.log('++++ added "' + key + '" : "' + player.bcAnalytics.client.defaultParams_[data[key]] + '"}  +++ ');
@@ -79,7 +80,6 @@ videojs.registerPlugin('simplegtm', function (options) {
             }
             _dataLayerArray['mediaAssetType'] = 'video'
         }
-        dataLayer.push(_dataLayerArray)
     });
 
 
@@ -87,7 +87,9 @@ videojs.registerPlugin('simplegtm', function (options) {
         debug && console.log('+++ play +++ ');
         if (firstPlay) {
             debug && console.log('+++ first play +++ ');
-            dataLayer.push({ "event": "mediaPlayProgressStarted" })
+            _dataLayerArray['event']='mediaPlayProgressStarted';
+            _dataLayerArray['mediaPlayProgressPosition']='';
+            dataLayer.push(_dataLayerArray)
             firstPlay = false
         } else {
             debug && console.log('+++ non first play +++ ');
@@ -108,7 +110,10 @@ videojs.registerPlugin('simplegtm', function (options) {
 
     player.on('ended', function () {
         debug && console.log('+++ ended +++ ');
-        dataLayer.push({ "event": "mediaPlaybackFinished" })
+        dataLayer.push({
+            "event": "mediaPlaybackFinished",
+            "mediaPlayProgressPosition": ""
+        })
     });
 
     player.on('timeupdate', function () {
