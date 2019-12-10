@@ -10,8 +10,10 @@ videojs.registerPlugin('simplegtm', function (options) {
     var _dataLayerArray;
 
     if (options) {
-        debug = options.debug;
-    }
+        debug = (window.localStorage.getItem("sdsat_debug") == 'true') || options.debug;
+    } 
+
+    
 
     var player = this,
         percentsPlayedInterval = options.percentsPlayedInterval,
