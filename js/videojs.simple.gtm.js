@@ -20,13 +20,8 @@ videojs.registerPlugin('simplegtm', function (options) {
     var mapping
     var domainRegex = /^(http|https):\/\/[\w\d.:]+/g
 
-
-
-
-    player.on('loadedmetadata', function () {
+    function populateData(){
         _dataLayerArray = {};
-        debug && console.log('++++ loadedmetadata +++ ');
-
         if (!options.mapping) {
             debug && console.log('++++ mapping data not provided +++ ');
         } else {
@@ -80,13 +75,23 @@ videojs.registerPlugin('simplegtm', function (options) {
             }
             _dataLayerArray['mediaAssetType'] = 'video'
         }
-    });
 
+    }
+    
+
+
+    player.on('loadedmetadata', function () {
+       
+        debug && console.log('++++ loadedmetadata +++ ');
+
+       
+    });
 
     player.on('play', function () {
         debug && console.log('+++ play +++ ');
         if (firstPlay) {
             debug && console.log('+++ first play +++ ');
+            populateData();
             _dataLayerArray['event']='mediaPlayProgressStarted';
             _dataLayerArray['mediaPlayProgressPosition']='';
             dataLayer.push(_dataLayerArray)
