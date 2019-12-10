@@ -78,13 +78,8 @@ videojs.registerPlugin('simplegtm', function (options) {
 
     }
 
-
-
     player.on('loadedmetadata', function () {
-
         debug && console.log('++++ loadedmetadata +++ ');
-
-
     });
 
     player.on('play', function () {
@@ -108,12 +103,12 @@ videojs.registerPlugin('simplegtm', function (options) {
     });
 
     player.on('pause', function () {
-        
+
         var currentTime = Math.round(this.currentTime());
         var duration = Math.round(this.duration());
         var percentPlayed = Math.round(currentTime / duration * 100);
         debug && console.log('+++ Percentage played' + percentPlayed + ' +++ ');
-        if (percentPlayed < 0.99) {
+        if (percentPlayed < 99) {
             debug && console.log('+++ pause +++ ');
             dataLayer.push({ "event": "mediaPlaybackPaused" })
         } else {
