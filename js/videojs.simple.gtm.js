@@ -20,7 +20,7 @@ videojs.registerPlugin('simplegtm', function (options) {
     var mapping
     var domainRegex = /^(http|https):\/\/[\w\d.:]+/g
 
-    function populateData(){
+    function populateData() {
         _dataLayerArray = {};
         if (!options.mapping) {
             debug && console.log('++++ mapping data not provided +++ ');
@@ -77,14 +77,14 @@ videojs.registerPlugin('simplegtm', function (options) {
         }
 
     }
-    
+
 
 
     player.on('loadedmetadata', function () {
-       
+
         debug && console.log('++++ loadedmetadata +++ ');
 
-       
+
     });
 
     player.on('play', function () {
@@ -92,8 +92,8 @@ videojs.registerPlugin('simplegtm', function (options) {
         if (firstPlay) {
             debug && console.log('+++ first play +++ ');
             populateData();
-            _dataLayerArray['event']='mediaPlayProgressStarted';
-            _dataLayerArray['mediaPlayProgressPosition']='';
+            _dataLayerArray['event'] = 'mediaPlayProgressStarted';
+            _dataLayerArray['mediaPlayProgressPosition'] = '';
             dataLayer.push(_dataLayerArray)
             firstPlay = false
         } else {
@@ -108,8 +108,17 @@ videojs.registerPlugin('simplegtm', function (options) {
     });
 
     player.on('pause', function () {
-        debug && console.log('+++ pause +++ ');
-        dataLayer.push({ "event": "mediaPlaybackPaused" })
+        
+        var currentTime = Math.round(this.currentTime());
+        var duration = Math.round(this.duration());
+        var percentPlayed = Math.round(currentTime / duration * 100);
+        debug && console.log('+++ Percentage played' + percentPlayed + ' +++ ');
+        if (percentPlayed < 0.99) {
+            debug && console.log('+++ pause +++ ');
+            dataLayer.push({ "event": "mediaPlaybackPaused" })
+        } else {
+            debug && console.log('+++ pause at the end detected +++ ');
+        }
 
     });
 
