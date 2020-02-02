@@ -1,61 +1,34 @@
 <html>
+
 <head>
-    <!-- Google Tag Manager -->
-    <script>(function (w, d, s, l, i) {
-            w[l] = w[l] || []; w[l].push({
-                'gtm.start':
-                    new Date().getTime(), event: 'gtm.js'
-            }); var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'XXXXX');</script>
-    <!-- End Google Tag Manager -->
-    <script>
-        window.dataLayer = window.dataLayer || [];
-    </script>
+    <!--script src="js/videojs.ga.js"></script-->
+    <script src="js/conviva/ClientMeasureInterface.js"></script>
+    <script src="js/conviva/ConvivaHelper.js"></script>
+    <script src="js/conviva/Http.js"></script>
+    <script src="js/conviva/Logging.js"></script>
+    <script src="js/conviva/Metadata.js"></script>
+    <script src="js/conviva/Storage.js"></script>
+    <script src="js/conviva/SystemInterfaceFactory.js"></script>
+    <script src="js/conviva/Time.js"></script>
+    <script src="js/conviva/Timer.js"></script>
+    <script src="js/conviva/conviva-core-sdk.min.js"></script>
 </head>
+
+
+
 <body>
+
     <div style="max-width: 960px;">
-        <video-js id="player" data-account="00000000" data-player="default" data-embed="default" controls=""
-            data-video-id="6081182324001" data-playlist-id="" data-application-id="" class="vjs-fluid"></video-js>
+        <video-js id="player" data-account="6057984922001" data-player="uw19rf2NY7" data-embed="default" controls=""
+            data-video-id="6113020506001" data-playlist-id="" data-application-id="" class="vjs-fluid"></video-js>
     </div>
-    <script src="https://players.brightcove.net/00000000/default_default/index.min.js"></script>
-    </script>
-    <script type="text/javascript" src="js/videojs.simple.gtm.js"></script>
+    <script src="https://players.brightcove.net/6057984922001/uw19rf2NY7_default/index.min.js"></script>
+    <script type="text/javascript" src="js/analytics.js"></script>
     <script type="text/javascript">
-        var options = {
-            "mapping": {
-                "mediainfo": [
-                    { "mediaAssetAccount": "accountId" },
-                    { "mediaAssetID": "id" },
-                    { "mediaAssetTitle": "name" },
-                    { "mediaAssetDuration": "duration" },
-                    { "mediaAssetDescription": "description" }
-                ],
-                "bcAnalytics.client.defaultParams_": [
-                    { "pageName": "destination" },
-                    { "mediaPlayerName": "player_name" },
-                    { "mediaAssetSessionID": "session" },
-                    { "mediaPlatformVersion": "platform_version" }
-                ],
-                "customFields": [
-                    { "matchSeasonName": "season_name" },
-                    { "matchChampionID": "match_champion_id" },
-                    { "matchRoundName": "round_name" },
-                    { "mediaProgramCategory": "program_category" },
-                    { "mediaProgramType": "program_type" },
-                    { "mediaAssetPubisherName": "content_provider" },
-                    { "mediaAdStatus": "no_ads" },
-                    { "competition": "competition" }
-                ]
-            },
-            "percentsPlayedInterval": 25,
-            "debug": false
-        };
+        var options = { "testing": { "gatewayUrl": "https://conviva.testonly.conviva.com", "customerKey": "da861ec60544e99da6f83ba0361417edf030f2c8" }, "production": { "gatewayUrl": "https://cws.conviva.com", "customerKey": "cefef1993557ccaad08847f77689343223365e06" }, "env": "production", "version": "0.11", "adobe": false };
     </script>
-    <script>
-        videojs.getPlayer('player').simplegtm(options);
-    </script>
+    <script>videojs.getPlayer('player').AdobeConviva(options);</script>
+
 
 </body>
 
